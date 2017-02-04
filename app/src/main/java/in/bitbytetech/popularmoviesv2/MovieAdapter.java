@@ -28,9 +28,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieViewHandler> {
     }
 
     public void setMovieList(List<Movie> movies) {
-        this.movieList = new ArrayList<>();
-        this.movieList.addAll(movies);
-        notifyDataSetChanged();
+        if ( movies != null ) {
+            this.movieList = new ArrayList<>();
+            this.movieList.addAll(movies);
+            notifyDataSetChanged();
+        }
     }
 
     @Override

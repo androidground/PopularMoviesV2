@@ -17,4 +17,6 @@
     <string name="average_vote">User Rating:\u0020</string>
     <string name="releaste_date">Release Date:\u0020</string>
     <string name="space_char">\u0020</string>
+
+    <string name="error_message">An error has occurred. Please try again after some time!</string>
 </resources>

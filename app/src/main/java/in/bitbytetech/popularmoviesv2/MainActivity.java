@@ -8,8 +8,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private MovieAdapter movieAdapter;
+    private TextView mErrorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tmdb_end_point = getResources().getString(R.string.moviedb_endpoint);
+
+        mErrorMessage = (TextView) findViewById(R.id.error_message);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
@@ -73,7 +79,11 @@ public class MainActivity extends AppCompatActivity {
         discoverMovies.enqueue(new Callback<MoviesInfo>() {
             @Override
             public void onResponse(Call<MoviesInfo> call, Response<MoviesInfo> response) {
-                movieAdapter.setMovieList(response.body().movieList);
+                if ( response.isSuccessful() )
+                    //movieAdapter.setMovieList(response.body().movieList);
+                    updateMovieAdapter(response.body().movieList);
+                else
+                    showErrorMessage();
             }
 
             @Override
@@ -81,6 +91,18 @@ public class MainActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+    }
+
+    private void updateMovieAdapter(List<Movie> movies) {
+        mErrorMessage.setVisibility(View.INVISIBLE);
+        mRecyclerView.setVisibility(View.VISIBLE);
+
+        movieAdapter.setMovieList(movies);
+    }
+
+    private void showErrorMessage() {
+        mErrorMessage.setVisibility(View.VISIBLE);
+        mRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     @Override
