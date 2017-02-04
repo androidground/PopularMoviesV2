@@ -9,8 +9,10 @@
     <string name="sort_top_rated">vote_average.desc</string>
 
     <string name="moviedb_endpoint">https://api.themoviedb.org/3/</string>
-    <string name="moviedb_api_key">8c58ac5affaae34a25411e6809f2e1ae</string>
     <string name="moviedb_language">en-US</string>
+
+    <!-- PLEASE PROVIDE THE API KEY GENERATED ON THEMOVIEDB.ORG -->
+    <string name="moviedb_api_key"></string>
 
     <string name="average_vote">User Rating:\u0020</string>
     <string name="releaste_date">Release Date:\u0020</string>
