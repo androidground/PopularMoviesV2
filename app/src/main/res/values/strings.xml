@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="title_activity_movie_detail">MovieDetailActivity</string>
+
+    <string name="action_popular_movies">Most Popular</string>
+    <string name="sort_popular_movies">popularity.desc</string>
+
+    <string name="action_toprated_movies">Top Rated</string>
+    <string name="sort_top_rated">vote_average.desc</string>
+
+    <string name="moviedb_endpoint">https://api.themoviedb.org/3/</string>
+    <string name="moviedb_api_key">8c58ac5affaae34a25411e6809f2e1ae</string>
+    <string name="moviedb_language">en-US</string>
+
+    <string name="average_vote">User Rating:\u0020</string>
+    <string name="releaste_date">Release Date:\u0020</string>
+    <string name="space_char">\u0020</string>
+</resources>
