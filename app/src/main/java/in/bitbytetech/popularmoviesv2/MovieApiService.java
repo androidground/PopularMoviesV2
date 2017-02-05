@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
 /**
@@ -19,8 +20,21 @@ import retrofit2.http.QueryMap;
 public interface MovieApiService {
 
     @GET ("discover/movie")
-    //void getPopularMovies(Callback<Movie.MovieResults> cb);
     Call<MoviesInfo> discoverMovies(
             @QueryMap(encoded=true) Map<String, String> options
     );
+
+    @GET ("movie/popular")
+    Call<MoviesInfo> getPopularMovies(
+            @Query(value="api_key", encoded = true) String apiKey,
+            @Query(value="language", encoded = true) String language
+    );
+
+    //movie/top_rated
+    @GET ("movie/top_rated")
+    Call<MoviesInfo> getTopRatedMovies(
+            @Query(value="api_key", encoded = true) String apiKey,
+            @Query(value="language", encoded = true) String language
+    );
+
 }

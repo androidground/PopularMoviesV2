@@ -32,6 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private MovieAdapter movieAdapter;
     private TextView mErrorMessage;
 
+    private String apiKey;
+    private String language;
+
+    private Retrofit retrofit;
+
+    private MovieApiService movieApiService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tmdb_end_point = getResources().getString(R.string.moviedb_endpoint);
+
+        apiKey = getResources().getString(R.string.moviedb_api_key);
+
+        language = getResources().getString(R.string.moviedb_language);
 
         mErrorMessage = (TextView) findViewById(R.id.error_message);
 
@@ -51,36 +62,40 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView.setAdapter(movieAdapter);
 
-        fetchData(R.id.action_popular_movies);
-    }
-
-    private void fetchData(int sortType) {
-
-        final Retrofit retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl(tmdb_end_point)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        final MovieApiService movieApiService = retrofit.create(MovieApiService.class);
+        movieApiService = retrofit.create(MovieApiService.class);
 
-        Map<String, String> queryData = new HashMap<String, String>();
-        queryData.put("api_key", getResources().getString(R.string.moviedb_api_key));
-        queryData.put("language", getResources().getString(R.string.moviedb_language));
+        fetchPopularMovies();
+    }
 
-        if ( sortType == R.id.action_popular_movies ) {
-            queryData.put("sort_by", getResources().getString(R.string.sort_popular_movies));
-        } else if ( sortType == R.id.action_toprated_movies) {
-            queryData.put("sort_by", getResources().getString(R.string.sort_top_rated));
-        }
-
-
-        Call<MoviesInfo> discoverMovies = movieApiService.discoverMovies(queryData);
-
-        discoverMovies.enqueue(new Callback<MoviesInfo>() {
+    private void fetchPopularMovies() {
+        Call<MoviesInfo> popularMovies = movieApiService.getPopularMovies(apiKey, language);
+        popularMovies.enqueue(new Callback<MoviesInfo>() {
             @Override
             public void onResponse(Call<MoviesInfo> call, Response<MoviesInfo> response) {
                 if ( response.isSuccessful() )
-                    //movieAdapter.setMovieList(response.body().movieList);
+                    updateMovieAdapter(response.body().movieList);
+                else
+                    showErrorMessage();
+            }
+
+            @Override
+            public void onFailure(Call<MoviesInfo> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void fetchTopRatedMovies() {
+        Call<MoviesInfo> popularMovies = movieApiService.getTopRatedMovies(apiKey, language);
+        popularMovies.enqueue(new Callback<MoviesInfo>() {
+            @Override
+            public void onResponse(Call<MoviesInfo> call, Response<MoviesInfo> response) {
+                if ( response.isSuccessful() )
                     updateMovieAdapter(response.body().movieList);
                 else
                     showErrorMessage();
@@ -126,11 +141,11 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_popular_movies: {
-                fetchData(R.id.action_popular_movies);
+                fetchPopularMovies();
                 break;
             }
             case R.id.action_toprated_movies: {
-                fetchData(R.id.action_toprated_movies);
+                fetchTopRatedMovies();
                 break;
             }
         }
